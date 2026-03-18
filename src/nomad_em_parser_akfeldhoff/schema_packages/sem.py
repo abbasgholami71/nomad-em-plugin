@@ -934,6 +934,9 @@ class ELNSEMExperiment(SEMExperiment, EntryData):
                     with Image.open(bmp_path) as img:
                         # SEM intensity images are stored as full-resolution uint8 for compact HDF5.
                         image_data = np.asarray(img.convert('L'), dtype=np.uint8)
+                        # Flip image vertically to match H5Web's Cartesian (bottom-left) origin
+                        image_data = np.flipud(image_data)
+
                         event.image_data = image_data
                         axis_x = np.arange(image_data.shape[1], dtype=np.float32)
                         axis_y = np.arange(image_data.shape[0], dtype=np.float32)
@@ -978,6 +981,10 @@ class ELNSEMExperiment(SEMExperiment, EntryData):
                 try:
                     with Image.open(bmp_path) as img:
                         image_data = np.asarray(img.convert('L'), dtype=np.uint8)
+
+                        # Flip image vertically to match H5Web's Cartesian (bottom-left) origin
+                        image_data = np.flipud(image_data)
+
                         event.image_data = image_data
                         # Note: No physical x_axis/y_axis because we don't have pixel_size!
                         event.x_axis = np.arange(image_data.shape[1], dtype=np.float32)
